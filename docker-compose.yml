@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: osmity
+      POSTGRES_PASSWORD: osmity_dev_password
+      POSTGRES_DB: osmity_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_local:/var/lib/postgresql/data
+  backend:
+    build:
+      context: ../osmity-web-backend
+      dockerfile: Dockerfile.dev
+      args:
+        APP_ENV: ${APP_ENV}
+        APP_VERSION: ${APP_VERSION}
+        BUILD_TIME: ${BUILD_TIME}
+        GIT_COMMIT: ${GIT_COMMIT}
+    depends_on:
+      - postgres
+    environment:
+      APP_ENV: ${APP_ENV}
+      PORT: 8080
+      VERSION: ${APP_VERSION}
+      BUILD_TIME: ${BUILD_TIME}
+      GIT_COMMIT: ${GIT_COMMIT}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: osmity
+      DB_PASSWORD: osmity_dev_password
+      DB_NAME: osmity_dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../osmity-web-backend:/app
+      - go_pkg_mod:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+
+  frontend:
+    build:
+      context: ../osmity-web-frontend
+      dockerfile: Dockerfile.dev
+      args:
+        APP_ENV: ${APP_ENV}
+        APP_VERSION: ${APP_VERSION}
+        BUILD_TIME: ${BUILD_TIME}
+        GIT_COMMIT: ${GIT_COMMIT}
+    depends_on:
+      - backend
+    environment:
+      APP_ENV: ${APP_ENV}
+      PORT: 3000
+      API_BASE_URL: http://backend:8080
+      VERSION: ${APP_VERSION}
+      BUILD_TIME: ${BUILD_TIME}
+      GIT_COMMIT: ${GIT_COMMIT}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../osmity-web-frontend:/app
+      - frontend_node_modules:/app/node_modules
+
+volumes:
+  frontend_node_modules:
+  go_pkg_mod:
+  go_build_cache:
+  pgdata_local:
