@@ -5,6 +5,7 @@ services:
       POSTGRES_USER: osmity
       POSTGRES_PASSWORD: osmity_dev_password
       POSTGRES_DB: osmity_dev
+    container_name: osmity-postgres-local
     ports:
       - "5432:5432"
     volumes:
