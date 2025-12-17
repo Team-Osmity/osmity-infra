@@ -15,17 +15,16 @@ services:
       dockerfile: Dockerfile.dev
       args:
         APP_ENV: ${APP_ENV}
-        APP_VERSION: ${APP_VERSION}
-        BUILD_TIME: ${BUILD_TIME}
-        GIT_COMMIT: ${GIT_COMMIT}
+        BACK_VERSION: ${APP_VERSION}
+        BACK_BUILD_TIME: ${BUILD_TIME}
+        BACK_COMMIT_SHA: ${COMMIT_SHA}
     depends_on:
       - postgres
     environment:
       APP_ENV: ${APP_ENV}
-      PORT: 8080
-      VERSION: ${APP_VERSION}
-      BUILD_TIME: ${BUILD_TIME}
-      GIT_COMMIT: ${GIT_COMMIT}
+      BACK_VERSION: ${APP_VERSION}
+      BACK_BUILD_TIME: ${BUILD_TIME}
+      BACK_COMMIT_SHA: ${COMMIT_SHA}
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: osmity
@@ -44,18 +43,16 @@ services:
       dockerfile: Dockerfile.dev
       args:
         APP_ENV: ${APP_ENV}
-        APP_VERSION: ${APP_VERSION}
-        BUILD_TIME: ${BUILD_TIME}
-        GIT_COMMIT: ${GIT_COMMIT}
+        FRONT_VERSION: ${APP_VERSION}
+        FRONT_BUILD_TIME: ${BUILD_TIME}
+        FRONT_COMMIT_SHA: ${COMMIT_SHA}
     depends_on:
       - backend
     environment:
-      APP_ENV: ${APP_ENV}
-      PORT: 3000
-      API_BASE_URL: http://backend:8080
-      VERSION: ${APP_VERSION}
-      BUILD_TIME: ${BUILD_TIME}
-      GIT_COMMIT: ${GIT_COMMIT}
+      NEXT_PUBLIC_APP_ENV: ${APP_ENV}
+      NEXT_PUBLIC_APP_VERSION: ${APP_VERSION}
+      NEXT_PUBLIC_BUILD_TIME: ${BUILD_TIME}
+      NEXT_PUBLIC_COMMIT_SHA: ${COMMIT_SHA}
     ports:
       - "3000:3000"
     volumes:

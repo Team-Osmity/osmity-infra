@@ -13,15 +13,6 @@ restart:
 logs:
 	docker compose logs -f
 
-build-frontend:
-	docker build \
-      --no-cache \
-      --build-arg APP_ENV=prod \
-      --build-arg FRONT_VERSION=local \
-      --build-arg FRONT_BUILD_TIME=local \
-      --build-arg FRONT_COMMIT_SHA=local \
-      -t osmity-frontend:local ../osmity-web-frontend
-
 migrate-up:
 	docker run --rm \
 	  --network container:osmity-postgres-local \
